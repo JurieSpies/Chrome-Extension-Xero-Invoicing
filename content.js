@@ -1,3 +1,19 @@
+
+chrome.contextMenus.create({
+  title:"Clear OV Credentials on Extension",
+  onclick:alert("clicked")
+})
+// Prompts User otherwise recall from Local storage
+const nameStart = localStorage.getItem('nameStart') || prompt("What is your name ?").charAt(0).toUpperCase()
+const surnameStart = localStorage.getItem('surnameStart') ||  prompt("What is your surname ?").charAt(0).toUpperCase()
+//WIP
+// const internetProvider =prompt("What is your surname ?")
+// const userClaimAmount = prompt("What is your surname ?")
+
+//Saved on Local storage
+localStorage.setItem('nameStart', nameStart)
+localStorage.setItem('surnameStart', surnameStart)
+
 const currentYear = new Date().getFullYear()
 
 const getMonthName={
@@ -32,9 +48,9 @@ const bottomTotal = document.getElementById("invoiceTotal")
 //Values to be filled in
 receiptFrom.value="rain" //Receipt from
 date.click()//Date
-reference.value= `OV01 - Rain - JS - ${currentMonth} ${currentYear}`//ref
+reference.value= `OV01 - Rain - ${localStorage.getItem('nameStart')}${localStorage.getItem('surnameStart')} - ${currentMonth} ${currentYear}`//ref
 topTotal.value='500.00'//Total
-description.value= `OV01 - Rain - JS - ${currentMonth} ${currentYear}` //Description
+description.value= `OV01 - Rain - ${localStorage.getItem('nameStart')}${localStorage.getItem('surnameStart')} - ${currentMonth} ${currentYear}` //Description
 account.value="405 - Cell phone"//Account
 unitPrice.value="500.00"//Unit Price
 taxRate.value="Tax Exempt (0%)"//Tax Rate

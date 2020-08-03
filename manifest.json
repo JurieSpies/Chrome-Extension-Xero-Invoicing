@@ -3,13 +3,14 @@
   "name": "Open Vantage Xero invoicing Plugin",
   "description": "Once on Xero invoicing page click this extension to fill up all text fields",
   "version": "0.1.0",
-
-"content_scripts": [
-  {
-    "matches": [
-     "<all_urls>"
-    ],
-    "js": ["content.js"]
-  }
-]
+  "content_scripts": [
+    {
+      "matches": ["https://go.xero.com/Expenses/*"],
+      "permissions": ["storage", "activeTab", "contextMenus"],
+      "js": ["content.js"],
+      "background": {
+        "scripts": ["background.js"]
+      }
+    }
+  ]
 }
