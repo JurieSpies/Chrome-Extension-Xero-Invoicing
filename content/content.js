@@ -1,4 +1,16 @@
-/* global Swal, removeVariable, getVariable, setVariable NAME_SURNAME, AMOUNT, PROVIDER, PROVIDER_OTHER, DETAILS_UPDATED, chrome */
+/* global 
+  Swal,
+  removeVariable,
+  getVariable,
+  setVariable,
+  NAME_SURNAME,
+  AMOUNT,
+  PROVIDER,
+  PROVIDER_OTHER,
+  LAST_EXPENSE_CLAIM_DATE,
+  DETAILS_UPDATED,
+  chrome
+*/
 
 const openClearModal = () => {
   Swal.fire({
@@ -23,6 +35,7 @@ const openClearModal = () => {
       await removeVariable(PROVIDER);
       await removeVariable(PROVIDER_OTHER);
       await removeVariable(DETAILS_UPDATED);
+      await removeVariable(LAST_EXPENSE_CLAIM_DATE);
       Swal.close();
       Swal.fire(
         'Cleared!',
