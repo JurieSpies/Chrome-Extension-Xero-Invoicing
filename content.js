@@ -1,14 +1,10 @@
 
-chrome.contextMenus.create({
-  title:"Clear OV Credentials on Extension",
-  onclick:alert("clicked")
-})
 // Prompts User otherwise recall from Local storage
+
+// Clear Local Storage
+// localStorage.clear()
 const nameStart = localStorage.getItem('nameStart') || prompt("What is your name ?").charAt(0).toUpperCase()
 const surnameStart = localStorage.getItem('surnameStart') ||  prompt("What is your surname ?").charAt(0).toUpperCase()
-//WIP
-// const internetProvider =prompt("What is your surname ?")
-// const userClaimAmount = prompt("What is your surname ?")
 
 //Saved on Local storage
 localStorage.setItem('nameStart', nameStart)
