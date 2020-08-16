@@ -1,13 +1,12 @@
 {
   "manifest_version": 2,
-  "name": "Open Vantage Xero invoicing Plugin",
-  "description": "Once on Xero invoicing page click this extension to fill up all text fields",
-  "version": "0.1.0",
-
-"content_scripts": [
-  {
-    "matches": ["https://go.xero.com/Expenses/*"],
-    "js": ["content.js"]
-  }
-]
+  "name": "GTmetrix Analyzer Plugin",
+  "description": "This extension will analyze a page using GTmetrix",
+  "version": "1.0",
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "activeTab"
+  ]
 }
