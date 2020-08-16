@@ -1,0 +1,19 @@
+:root {
+    --dark-sky-blue: #78c0e0ff;
+    --carolina-blue: #449dd1ff;
+    --navy-blue: #150578ff;
+    --midnight-blue: #0e0e52ff;
+    --denim-blue: #3943b7ff;
+}
+
+.container {
+    height: 300px;
+    width: 200px;
+    background-color: white;
+}
+
+body {
+    margin: 0;
+    padding: 3px;
+    background-color: lightskyblue;
+}

@@ -1,22 +1,34 @@
 {
     "manifest_version": 2,
-    "name": "Open Vantage Xero invoicing Plugin",
-    "description": "Once on Xero invoicing page click this extension to fill up all text fields",
+    "name": "Open Vantage Xero Invoicing Plugin",
+    "description": "Autofills receipts with cellphone claim information & generate files for emailing",
     "version": "0.1.0",
     "browser_action": {
         "default_popup": "popup.html",
         "default_icon": {
-            "16": "images/get_started16.png",
-            "32": "images/get_started32.png",
-            "48": "images/get_started48.png",
-            "128": "images/get_started128.png"
+            "16": "images/icon16.png",
+            "32": "images/icon32.png",
+            "48": "images/icon48.png",
+            "128": "images/icon128.png"
         }
     },
     "permissions": [
         "activeTab"
     ],
-    "content_scripts": [{
-        "matches": ["https://go.xero.com/Expenses/*"],
-        "js": ["content.js"]
-    }]
+    "content_scripts": [
+        {
+            "matches": [
+                "https://go.xero.com/Expenses/*"
+            ],
+            "js": [
+                "libs/sweetalert2.min.js",
+                "libs/xlsx.full.min.js",
+                "content.js"
+            ]
+        }
+    ],
+    "web_accessible_resources": [
+        "files/*",
+        "images/*"
+      ]
 }
