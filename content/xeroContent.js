@@ -109,24 +109,26 @@ const openAutofillModal = async () => {
     }
   }
   ]).then(async ({ value: results }) => {
-    const fileName = await getInvoiceFileName();
-    Swal.fire({
-      title: 'Generating Files',
-      html: 'Filling in your forms and generating your files, please wait ...',
-      onBeforeOpen: () => {
-        Swal.showLoading();
-      }
-    });
-    await setVariable(AMOUNT, results[1]);
-    await autofillReceiptForm();
-    await downloadFile(results[0], fileName);
-    await generateExcelSpreadsheet();
-    Swal.close();
-    Swal.fire(
-      'Done!',
-      'Your form has been autofilled in! Also check your downloads for the files needed to submit!',
-      'success'
-    );
+    if (results) {
+      const fileName = await getInvoiceFileName();
+      Swal.fire({
+        title: 'Generating Files',
+        html: 'Filling in your forms and generating your files, please wait ...',
+        onBeforeOpen: () => {
+          Swal.showLoading();
+        }
+      });
+      await setVariable(AMOUNT, results[1]);
+      await autofillReceiptForm();
+      await downloadFile(results[0], fileName);
+      await generateExcelSpreadsheet();
+      Swal.close();
+      Swal.fire(
+        'Done!',
+        'Your form has been autofilled in! Also check your downloads for the files needed to submit!',
+        'success'
+      );
+    }
   });
 };
 
@@ -216,6 +218,20 @@ const autofillReceiptForm = async () => {
 
 chrome.runtime.onMessage.addListener(data => {
   if (data.type === 'XERO_AUTOFILL') {
+    openAutofillModal();
+  }
+});
+
+Swal.fire({
+  title: 'Autofill Receipt',
+  text: 'Would you like to autofill your receipt? You can always click the autofill button on the extention if you cancel :)',
+  confirmButtonText: 'Yes, Autofill &#10003;',
+  cancelButtonText: 'No, &#10007;',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+}).then(({value}) => {
+  if (value) {
     openAutofillModal();
   }
 });
