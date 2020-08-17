@@ -1,16 +1,28 @@
+/* global chrome */
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
   const xeroButton = document.getElementById('xero-btn');
   const editButton = document.getElementById('edit-btn');
   const receiptButton = document.getElementById('receipt-btn');
   const clearButton = document.getElementById('clear-btn');
+  const openVantageLogo = document.getElementById('ov-logo');
+
+  chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+    if (tabs[0].url !== 'https://go.xero.com/Expenses/EditReceipt.aspx') {
+      receiptButton.setAttribute('disabled', true);
+    }
+  });
 
   const sendCommand = (command) => {
-    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+    chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
       console.log(tabs[0]);
       chrome.tabs.sendMessage(tabs[0].id, { type: command });
     });
-  }
+  };
+
+  openVantageLogo.addEventListener('click', () => {
+    chrome.tabs.create({ url: 'https://www.openvantage.co/' });
+  });
 
   xeroButton.addEventListener('click', () => {
     chrome.tabs.create({ url: 'https://go.xero.com/Expenses/EditReceipt.aspx' });

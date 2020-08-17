@@ -4,7 +4,7 @@
     "description": "Autofills receipts with cellphone claim information & generate files for emailing",
     "version": "0.1.0",
     "browser_action": {
-        "default_popup": "popup.html",
+        "default_popup": "popup/popup.html",
         "default_icon": {
             "16": "images/icon16.png",
             "32": "images/icon32.png",
@@ -13,7 +13,8 @@
         }
     },
     "permissions": [
-        "activeTab"
+        "activeTab",
+        "storage"
     ],
     "content_scripts": [
         {
@@ -23,7 +24,17 @@
             "js": [
                 "libs/sweetalert2.min.js",
                 "libs/xlsx.full.min.js",
-                "content.js"
+                "content/xeroContent.js"
+            ]
+        },
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "libs/sweetalert2.min.js",
+                "content/utils.js",
+                "content/content.js"
             ]
         }
     ],
