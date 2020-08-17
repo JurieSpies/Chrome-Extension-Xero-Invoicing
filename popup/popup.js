@@ -6,10 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const receiptButton = document.getElementById('receipt-btn');
   const clearButton = document.getElementById('clear-btn');
   const openVantageLogo = document.getElementById('ov-logo');
+  const aboutButton = document.getElementById('about-btn');
 
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
     if (tabs[0].url !== 'https://go.xero.com/Expenses/EditReceipt.aspx') {
       receiptButton.setAttribute('disabled', true);
+      receiptButton.setAttribute('title', 'Can only use autofill on Xero Receipt page');
     }
   });
 
@@ -38,5 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   editButton.addEventListener('click', () => {
     sendCommand('XERO_EDIT');
+  });
+
+  aboutButton.addEventListener('click', () => {
+    sendCommand('XERO_ABOUT');
   });
 });

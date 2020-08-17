@@ -1,4 +1,4 @@
-/* global Swal, XLSX, chrome, getVariable, setVariable NAME_SURNAME, AMOUNT, PROVIDER */
+/* global Swal, XLSX, chrome, getVariable, setVariable NAME_SURNAME, AMOUNT, PROVIDER, PROVIDER_OTHER, DETAILS_UPDATED, openEditDetailsModal */
 
 const generateExcelSpreadsheet = () => {
   return new Promise(resolve => fetch(chrome.runtime.getURL('/files/expenseClaim.xlsx'))
@@ -19,8 +19,7 @@ const generateExcelSpreadsheet = () => {
         });
         const amount = await getVariable(AMOUNT);
         const fileName = await getInvoiceFileName();
-        const supplier_ = await getVariable(PROVIDER);
-        const supplier = providerMap[supplier_];
+        const supplier = await getProvider();
         workbook.Sheets['Expenses Claim']['B3'] = {
           h: `${fileName}`,
           r: `<t>${fileName}</t>`,
@@ -76,6 +75,7 @@ const providerMap = {
   vodacom: 'Vodacom',
   mtn: 'MTN',
   telkom: 'Telkom Mobile',
+  fnb: 'FNB',
 };
 
 const openAutofillModal = async () => {
@@ -174,17 +174,21 @@ const getExcelFileName = async () => {
   const currentYear = getCurrentYear();
   const currentMonth = getCurrentMonth();
   const nameSurname = await getVariable(NAME_SURNAME);
-  return `Expense_claim_${nameSurname.split(' ')[0][0]}${nameSurname.split(' ')[1][0]}_${currentMonth}_${currentYear}`;
+  return `Expense_claim_${nameSurname.split(' ')[0][0].toUpperCase()}${nameSurname.split(' ')[1][0].toUpperCase()}_${currentMonth}_${currentYear}`;
 };
 
 const getInvoiceFileName = async () => {
   const currentYear = getCurrentYear();
   const currentMonth = getCurrentMonth();
-  const prov = await getVariable(PROVIDER);
   const nameSurname = await getVariable(NAME_SURNAME);
-  const provider_ = providerMap[prov];
+  const provider_ = await getProvider();
   const provider = provider_[0].toUpperCase() + provider_.slice(1);
-  return `OV01 - ${provider} - ${nameSurname.split(' ')[0][0]}${nameSurname.split(' ')[1][0]} - ${currentMonth} ${currentYear}`;
+  return `OV01 - ${provider} - ${nameSurname.split(' ')[0][0].toUpperCase()}${nameSurname.split(' ')[1][0].toUpperCase()} - ${currentMonth} ${currentYear}`;
+};
+
+const getProvider = async () => {
+  const provider = await getVariable(PROVIDER);
+  return provider === 'other' ? await getVariable(PROVIDER_OTHER) : providerMap[provider];
 };
 
 const autofillReceiptForm = async () => {
@@ -201,9 +205,9 @@ const autofillReceiptForm = async () => {
   const bottomTotal = d.getElementById('invoiceTotal');
   const fileName = await getInvoiceFileName();
   const amount = await getVariable(AMOUNT);
-  const provider = await getVariable(PROVIDER);
+  const provider = await getProvider();
   // Values to be filled in
-  receiptFrom.value = providerMap[provider]; // Receipt from
+  receiptFrom.value = provider; // Receipt from
   date.click(); // Date
   document.getElementsByClassName('x-date-active')[0].children[0].click(); // Select the first date;
   reference.value = fileName;
@@ -216,22 +220,78 @@ const autofillReceiptForm = async () => {
   bottomTotal.value = amount; // Total
 };
 
+const handleAutoFill = async () => {
+  const detailsComplete = await checkDetailsCompleted();
+  if (!detailsComplete) {
+    openEditDetailsModal().then(() => openAutofillModal());
+  } else {
+    openAutofillModal();
+  }
+};
+
 chrome.runtime.onMessage.addListener(data => {
   if (data.type === 'XERO_AUTOFILL') {
-    openAutofillModal();
+    handleAutoFill();
   }
 });
 
-Swal.fire({
-  title: 'Autofill Receipt',
-  text: 'Would you like to autofill your receipt? You can always click the autofill button on the extention if you cancel :)',
-  confirmButtonText: 'Yes, Autofill &#10003;',
-  cancelButtonText: 'No, &#10007;',
-  showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#d33',
-}).then(({value}) => {
-  if (value) {
-    openAutofillModal();
+const checkDetailsCompleted = async () => {
+  return new Promise(resolve => {
+    const detailsRequired = [NAME_SURNAME, PROVIDER, DETAILS_UPDATED];
+    const promises = detailsRequired.map(getVariable);
+    Promise.all(promises).then(values => {
+      resolve(values.every(val => val));
+    });
+  });
+};
+
+const openWelcomeModal = () => {
+  Swal.fire({
+    title: 'Hi there!',
+    html: `
+      <span>We see that this is the first time the extention has been active on this page, would you like to complete your personal details?</span>
+      <br />
+      <span style="font-size: 12px;">Please be aware that you cannot autofill receipts until you have completed your personal details</span>
+    `,
+    confirmButtonText: 'Yes, Let\'s go! &#10003;',
+    cancelButtonText: 'No, Later &#10007;',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+  }).then(({value}) => {
+    if (value) {
+      openEditDetailsModal().then(res => {
+        if (res) {
+          openPromptAutoFillModal();
+        }
+      });
+    }
+  });
+};
+
+const openPromptAutoFillModal = () => {
+  Swal.fire({
+    title: 'Autofill Receipt',
+    text: 'Would you like to autofill your receipt? You can always click the autofill button on the extention if you cancel :)',
+    confirmButtonText: 'Yes, Autofill &#10003;',
+    cancelButtonText: 'No, &#10007;',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+  }).then(({value}) => {
+    if (value) {
+      openAutofillModal();
+    }
+  });
+};
+
+const onPageFirstLoad = async () => {
+  const detailsComplete = await checkDetailsCompleted();
+  if (!detailsComplete) {
+    openWelcomeModal();
+  } else {
+    openPromptAutoFillModal();
   }
-});
+};
+
+onPageFirstLoad();

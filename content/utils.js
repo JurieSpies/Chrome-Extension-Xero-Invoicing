@@ -5,12 +5,13 @@
 const NAME_SURNAME = 'XERO_NAME_SURNAME';
 const AMOUNT = 'XERO_AMOUNT';
 const PROVIDER = 'XERO_PROVIDER';
+const PROVIDER_OTHER = 'XERO_PROVIDER_OTHER';
 const DETAILS_UPDATED = 'XERO_DETAILS_UPDATED';
 
 const getVariable = async (key) => {
   return new Promise(resolve => {
     chrome.storage.sync.get(key, (result) => {
-      resolve(result[key]);
+      resolve(result[key] || '');
     });
   });
 };

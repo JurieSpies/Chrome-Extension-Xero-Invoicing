@@ -12,35 +12,35 @@
 }
 
 @font-face {
-    font-family: "Lato";
-    src: url("./fonts/Lato/Lato-Bold.ttf");
-    font-weight: bold;
+  font-family: "Lato";
+  src: url("./fonts/Lato/Lato-Bold.ttf");
+  font-weight: bold;
 }
 
 @font-face {
-    font-family: "Lato";
-    src: url("./fonts/Lato/Lato-Italic.ttf");
-    font-style: italic;
+  font-family: "Lato";
+  src: url("./fonts/Lato/Lato-Italic.ttf");
+  font-style: italic;
 }
 
 @font-face {
-    font-family: "Lato";
-    src: url("./fonts/Lato/Lato-BoldItalic.ttf");
-    font-weight: bold;
-    font-style: italic;
+  font-family: "Lato";
+  src: url("./fonts/Lato/Lato-BoldItalic.ttf");
+  font-weight: bold;
+  font-style: italic;
 }
 
 @font-face {
-    font-family: "Lato";
-    src: url("./fonts/Lato/Lato-Light.ttf");
-    font-weight: lighter;
+  font-family: "Lato";
+  src: url("./fonts/Lato/Lato-Light.ttf");
+  font-weight: lighter;
 }
 
 @font-face {
-    font-family: "Lato";
-    src: url("./fonts/Lato/Lato-LightItalic.ttf");
-    font-weight: lighter;
-    font-style: italic;
+  font-family: "Lato";
+  src: url("./fonts/Lato/Lato-LightItalic.ttf");
+  font-weight: lighter;
+  font-style: italic;
 }
 
 .container {
@@ -65,16 +65,16 @@ button {
 }
 
 button:disabled {
-    background: grey;
-    cursor: not-allowed;
+  background: grey;
+  cursor: not-allowed;
 }
 
 button:disabled:hover {
-    transform: scale(1);
+  transform: scale(1);
 }
 
 button.danger {
-    background: red;
+  background: red;
 }
 
 button:hover {
@@ -87,4 +87,15 @@ body {
   padding: 7.5px;
   font-family: "Lato";
   font-weight: bold;
+}
+
+.about {
+  align-self: center;
+  cursor: pointer;
+}
+
+.hint {
+  align-self: center;
+  font-size: 10px;
+  color: grey;
 }
