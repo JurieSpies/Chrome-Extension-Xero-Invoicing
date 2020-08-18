@@ -63,7 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   leaveButton.addEventListener('click', () => {
-    sendCommand('LEAVE_FORM');
+    chrome.notifications.create({
+      type:'basic',
+      title: 'Xero Claim',
+      message: 'Please remember to submit your Xero Claim',
+      iconUrl: chrome.runtime.getURL('/images/icon32.png'),
+    }, notifcation => console.log('xxxxxxxxxxxxxx', notifcation));
+    // sendCommand('LEAVE_FORM');
   });
 
   clearButton.addEventListener('click', () => {
