@@ -63,8 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     leaveButton.addEventListener('click', () => {
-        chrome.tabs.create({ url: 'https://drive.google.com/uc?export=download&id=1rRFkjcM77_jXF6ffhmQY_kioIoZiyRtk' }); // <-- use for testing Jurie google drive file
-        // chrome.tabs.create({ url: 'https://docs.google.com/document/d/1nYXgQVxYT70cR1xOc-XJvAJt9NDPn--QRStLs9H3aeQ/edit?usp=sharing' }); //OV google drive file
+        // chrome.tabs.create({ url: 'https://drive.google.com/uc?export=download&id=1rRFkjcM77_jXF6ffhmQY_kioIoZiyRtk' }); // <-- use for testing Jurie google drive file
+        sendCommand('LEAVE_FORM')
     });
 
     clearButton.addEventListener('click', () => {
