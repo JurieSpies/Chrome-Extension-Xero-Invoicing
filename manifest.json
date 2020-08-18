@@ -1,41 +1,44 @@
 {
-  "manifest_version": 2,
-  "name": "Open Vantage Extention",
-  "description": "Useful tools for Open Vantage Employees",
-  "version": "1.0.0",
-  "background": {
-    "scripts": ["content/utils.js", "background/background.js"],
-    "persistent": false
-  },
-  "browser_action": {
-    "default_popup": "popup/popup.html",
-    "default_icon": {
-      "16": "images/icon16.png",
-      "32": "images/icon32.png",
-      "48": "images/icon48.png",
-      "128": "images/icon128.png"
-    }
-  },
-  "permissions": ["activeTab", "storage", "alarms"],
-  "content_scripts": [
-    {
-      "matches": ["https://go.xero.com/Expenses/*"],
-      "js": [
-        "libs/sweetalert2.min.js",
-        "libs/xlsx.full.min.js",
-        "content/utils.js",
-        "content/content.js",
-        "content/xeroContent.js"
-      ]
+    "manifest_version": 2,
+    "name": "Open Vantage Extention",
+    "description": "Useful tools for Open Vantage Employees",
+    "version": "1.0.0",
+    "background": {
+        "scripts": ["content/utils.js", "background/background.js"],
+        "persistent": false
     },
-    {
-      "matches": ["<all_urls>"],
-      "js": [
-        "libs/sweetalert2.min.js",
-        "content/utils.js",
-        "content/content.js"
-      ]
-    }
-  ],
-  "web_accessible_resources": ["files/*", "images/*"]
+    "browser_action": {
+        "default_popup": "popup/popup.html",
+        "default_icon": {
+            "16": "images/icon16.png",
+            "32": "images/icon32.png",
+            "48": "images/icon48.png",
+            "128": "images/icon128.png"
+        }
+    },
+    "permissions": ["activeTab", "storage", "alarms"],
+    "content_scripts": [{
+            "matches": ["https://go.xero.com/Expenses/*"],
+            "js": [
+                "libs/sweetalert2.min.js",
+                "libs/xlsx.full.min.js",
+                "content/utils.js",
+                "content/content.js",
+                "content/xeroContent.js"
+            ]
+        },
+        {
+            "matches": ["<all_urls>"],
+            "js": [
+                "libs/sweetalert2.min.js",
+                "libs/FileSaver.js",
+                "libs/pizzip.js",
+                "libs/pizzip-utils.js",
+                "libs/docxtemplater.js",
+                "content/utils.js",
+                "content/content.js"
+            ]
+        }
+    ],
+    "web_accessible_resources": ["files/*", "images/*"]
 }

@@ -4,6 +4,7 @@
   getVariable,
   setVariable,
   NAME_SURNAME,
+  POSITION,
   AMOUNT,
   PROVIDER,
   PROVIDER_OTHER,
@@ -31,6 +32,7 @@ const openClearModal = () => {
                 }
             });
             await removeVariable(NAME_SURNAME);
+            await removeVariable(POSITION);
             await removeVariable(AMOUNT);
             await removeVariable(PROVIDER);
             await removeVariable(PROVIDER_OTHER);
@@ -80,13 +82,16 @@ const openEditDetailsModal = async() => {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async resolve => {
         const nameSurname = await getVariable(NAME_SURNAME);
+        const position = await getVariable(POSITION);
         const provider = await getVariable(PROVIDER);
-        console.log('Variables', nameSurname, provider);
+
+        // console.log('Variables', nameSurname, provider);
+
         Swal.mixin({
             title: 'Edit Details',
             confirmButtonText: 'Next &rarr;',
             showCancelButton: true,
-            progressSteps: ['1', '2'],
+            progressSteps: ['1', '2', '3'],
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
         }).queue([{
@@ -97,6 +102,27 @@ const openEditDetailsModal = async() => {
                 inputValidator: (value) => {
                     if (!value) {
                         return 'Please fill in name & surname!';
+                    }
+                },
+            },
+            {
+                text: 'What is your Position',
+                input: 'text',
+                inputPlaceholder: 'Software Developer...',
+                inputValue: position,
+                inputOptions: {
+                    'mtn': 'MTN',
+                    'cellc': 'CellC',
+                    'vodacom': 'Vodacom',
+                    'rain': 'Rain',
+                    'telkom': 'Telkom Mobile',
+                    'fnb': 'FNB',
+                    'afrihost': 'Afrihost',
+                    'other': 'Other (Not on list)'
+                },
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Please select a provider!';
                     }
                 },
             },
@@ -132,7 +158,8 @@ const openEditDetailsModal = async() => {
                         }
                     });
                     await setVariable(NAME_SURNAME, results[0]);
-                    await setVariable(PROVIDER, results[1]);
+                    await setVariable(POSITION, results[1]);
+                    await setVariable(PROVIDER, results[2]);
                     await setVariable(DETAILS_UPDATED, (new Date()).toString());
                     Swal.close();
                     Swal.fire(
@@ -141,7 +168,7 @@ const openEditDetailsModal = async() => {
                         'success'
                     ).then(() => resolve(true));
                 };
-                if (results[1] === 'other') {
+                if (results[2] === 'other') {
                     openOtherProviderModal().then(res => {
                         if (res) {
                             syncData();
@@ -195,9 +222,10 @@ const generateLeaveApplication = () => {
     function loadFile(url, callback) {
         PizZipUtils.getBinaryContent(url, callback);
     }
+    generate()
 
     function generate() {
-        loadFile("../files/LeaveRequestForm.docx", function(error, content) {
+        loadFile(chrome.runtime.getURL('/files/LeaveRequestForm.docx'), async function(error, content) {
             if (error) { throw error };
 
             // The error object contains additional information when logged with JSON.stringify (it contains a properties object containing all suberrors).
@@ -234,8 +262,12 @@ const generateLeaveApplication = () => {
                 errorHandler(error);
             }
 
+            const firstName = await getVariable(NAME_SURNAME)
+            const position = await getVariable(POSITION)
+
             doc.setData({
-                first_name: 'Zoro',
+                first_name: firstName || 'Go to "Edit Personal details" and insert your Name',
+                position: position || 'Go to "Edit Personal details" and insert your Position'
             });
             try {
                 // render the document (replace all occurrences of {first_name} by John, {last_name} by Doe, ...)
@@ -249,7 +281,7 @@ const generateLeaveApplication = () => {
                     type: "blob",
                     mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 }) //Output the document using Data-URI
-            saveAs(out, "MyLeaveRequestForm.docx")
+            saveAs(out, `${firstName} - Leave Request Form.docx`)
         })
     }
 }
