@@ -44,10 +44,12 @@
 }
 
 .container {
-    width: 300px;
+    width: 400px;
     background-color: white;
     display: flex;
     flex-direction: column;
+    height: 500px;
+    overflow: hidden;
 }
 
 button {
@@ -88,6 +90,7 @@ body {
     padding: 7.5px;
     font-family: "Lato";
     font-weight: bold;
+    overflow: hidden;
 }
 
 .about {
@@ -99,4 +102,12 @@ body {
     align-self: center;
     font-size: 10px;
     color: grey;
+}
+
+.swal2-styled {
+    margin: .3125em;
+    padding: 0.4em 2em !important;
+    box-shadow: none;
+    font-weight: 500;
+    height: 2.625em !important;
 }
