@@ -1,11 +1,4 @@
 /* global chrome, getVariable, LAST_EXPENSE_CLAIM_DATE */
-const sendCommand = (command) => {
-  chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
-    if (tabs[0]) {
-      chrome.tabs.sendMessage(tabs[0].id, { type: command });
-    }
-  });
-};
 
 const handleReminderAlarm = async () => {
   const lastExpenseClaim = await getVariable(LAST_EXPENSE_CLAIM_DATE);
