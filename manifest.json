@@ -2,13 +2,19 @@
   "manifest_version": 2,
   "name": "Open Vantage Extention",
   "description": "Useful tools for Open Vantage Employees",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "background": {
     "scripts": [
       "content/utils.js",
       "background/background.js"
     ],
     "persistent": false
+  },
+  "icons": {
+    "16": "images/icon16.png",
+    "32": "images/icon32.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
   },
   "browser_action": {
     "default_popup": "popup/popup.html",
