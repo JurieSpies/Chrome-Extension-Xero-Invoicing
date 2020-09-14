@@ -213,8 +213,10 @@ const autofillReceiptForm = async () => {
   const topTotal = d.getElementsByClassName('field')[6];
   const description = d.getElementsByClassName('field xoDescription')[0];
   const unitPrice = d.getElementsByClassName('field')[11];
-  const account = d.getElementsByClassName('dd')[1].children[0];
-  const taxRate = d.getElementsByClassName('tax')[2];
+  const account = d.getElementsByClassName('account')[0];
+  const accountDropdown = account.children[2].children[1];
+  const taxRate = d.getElementsByClassName('tax')[0];
+  const taxRateDropdown = taxRate.children[2].children[1];
   const amountZar = d.getElementsByClassName('field totalLineItem')[0];
   const bottomTotal = d.getElementById('invoiceTotal');
   const fileName = await getInvoiceFileName();
@@ -227,11 +229,23 @@ const autofillReceiptForm = async () => {
   reference.value = fileName;
   topTotal.value = amount; // Total
   description.value = fileName;
-  account.value = '405 - Cell phone'; // Account
-  unitPrice.value = amount; // Unit Price
-  taxRate.value = 'Tax Exempt (0%)'; // Tax Rate
-  amountZar.value = amount; // Amount ZAR
-  bottomTotal.value = amount; // Total
+  accountDropdown.click();
+  const clickAccountSuggestion = () => {
+    const accountSuggestions = Array.from(account.children[3].children[0].children);
+    accountSuggestions.find(el => el.innerText.toLowerCase().includes('405 - Cell phone'.toLowerCase())).click();
+    taxRateDropdown.click();
+  }
+  const clickTaxRateSuggetion = () => {
+    const taxRateSuggestion = Array.from(taxRate.children[3].children[0].children);
+    taxRateSuggestion.find(el => el.innerText.toLowerCase().includes('Tax Exempt (0%)'.toLowerCase())).click();
+    unitPrice.value = amount; // Unit Price
+    amountZar.value = amount; // Amount ZAR
+    bottomTotal.value = amount; // Total
+  }
+  setTimeout(() => {
+    clickAccountSuggestion();
+    setTimeout(clickTaxRateSuggetion, 1);
+  }, 1);
 };
 
 const handleAutoFill = async () => {
