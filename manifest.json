@@ -34,7 +34,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://go.xero.com/Expenses/*"
+        "https://go.xero.com/Expenses/EditReceipt*"
       ],
       "js": [
         "libs/sweetalert2.min.js",
