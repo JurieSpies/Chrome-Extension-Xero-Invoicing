@@ -1,4 +1,17 @@
-/* global Swal, XLSX, chrome, getVariable, setVariable NAME_SURNAME, AMOUNT, PROVIDER, PROVIDER_OTHER, DETAILS_UPDATED, openEditDetailsModal */
+/* global 
+  Swal, 
+  XLSX, 
+  chrome, 
+  getVariable, 
+  setVariable,
+  openEditDetailsModal,
+  NAME_SURNAME,
+  AMOUNT,
+  PROVIDER,
+  PROVIDER_OTHER,
+  DETAILS_UPDATED,
+  LAST_EXPENSE_CLAIM_DATE,
+*/
 
 const generateExcelSpreadsheet = () => {
   return new Promise(resolve => fetch(chrome.runtime.getURL('/files/expenseClaim.xlsx'))
@@ -119,6 +132,7 @@ const openAutofillModal = async () => {
         }
       });
       await setVariable(AMOUNT, results[1]);
+      await setVariable(LAST_EXPENSE_CLAIM_DATE, (new Date()).toDateString());
       await autofillReceiptForm();
       await downloadFile(results[0], fileName);
       await generateExcelSpreadsheet();

@@ -7,7 +7,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const clearButton = document.getElementById('clear-btn');
   const openVantageLogo = document.getElementById('ov-logo');
   const aboutButton = document.getElementById('about-btn');
+  const notificationButton = document.getElementById('notification-btn');
+  const alarmName = 'XERO_REMINDER';
+  let alarmActive = false;
 
+  chrome.alarms.get(alarmName, alarm => {
+    console.log(alarm);
+    if (alarm) {
+      alarmActive = true;
+      notificationButton.innerText = 'Disable Expense Claim Notification';
+    } else {
+      alarmActive = false;
+      notificationButton.innerText = 'Enable Expense Claim Notification';
+    }
+  });
+  
   chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
     if (tabs[0].url !== 'https://go.xero.com/Expenses/EditReceipt.aspx') {
       receiptButton.setAttribute('disabled', true);
@@ -17,13 +31,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const sendCommand = (command) => {
     chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
-      console.log(tabs[0]);
-      chrome.tabs.sendMessage(tabs[0].id, { type: command });
+      if (tabs[0]) {
+        chrome.tabs.sendMessage(tabs[0].id, { type: command });
+      }
     });
   };
 
   openVantageLogo.addEventListener('click', () => {
     chrome.tabs.create({ url: 'https://www.openvantage.co/' });
+  });
+
+  notificationButton.addEventListener('click', () => {
+    if (alarmActive) {
+      chrome.alarms.clearAll();
+      alarmActive = false;
+      notificationButton.innerText = 'Enable Expense Claim Notification';
+    } else {
+      chrome.alarms.create(alarmName, { periodInMinutes: 60 });
+      alarmActive = true;
+      notificationButton.innerText = 'Disable Expense Claim Notification';
+    }
   });
 
   xeroButton.addEventListener('click', () => {

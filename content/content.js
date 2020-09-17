@@ -162,7 +162,23 @@ const openAboutModal = () => {
   });
 };
 
-chrome.runtime.onMessage.addListener(function (data) {
+const openReminderModal = () => {
+  Swal.fire({
+    title: 'Open Vantage Expense Claim',
+    confirmButtonText: 'Yes, Please! &#10003;',
+    cancelButtonText: 'No, Later &#10007;',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    text: 'Just a reminder to submit your expense claim! Would you like to submit it now?',
+  }).then(async ({ value: result }) => {
+    if (result) {
+      window.open('https://go.xero.com/Expenses/EditReceipt.aspx', '_blank');
+    }
+  });
+};
+
+chrome.runtime.onMessage.addListener(data => {
   if (data.type === 'XERO_EDIT') {
     openEditDetailsModal();
   }
@@ -171,5 +187,8 @@ chrome.runtime.onMessage.addListener(function (data) {
   }
   if (data.type === 'XERO_ABOUT') {
     openAboutModal();
+  }
+  if  (data.type === 'XERO_REMINDER') {
+    openReminderModal();
   }
 });
