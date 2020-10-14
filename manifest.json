@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Open Vantage Extention",
   "description": "Useful tools for Open Vantage Employees",
-  "version": "1.1.1",
+  "version": "1.1.4",
   "background": {
     "scripts": [
       "content/utils.js",

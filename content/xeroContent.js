@@ -241,12 +241,21 @@ const autofillReceiptForm = async () => {
     unitPrice.value = amount; // Unit Price
     amountZar.value = amount; // Amount ZAR
     bottomTotal.value = amount; // Total
+    openEmailHandler();
   }
   setTimeout(() => {
     clickAccountSuggestion();
     setTimeout(clickTaxRateSuggetion, 1);
   }, 1);
 };
+
+const openEmailHandler = async () => {
+  const nameSurname = await getVariable(NAME_SURNAME);
+  const receipt = 'kirst.fieldgate@openvantage.co.za ';
+  const subject = encodeURIComponent(`Expense Claim ${nameSurname} - ${getCurrentMonth()}`);
+  const body = encodeURIComponent(`Hi Kirst,\nPlease find attached the expense claim for ${getCurrentMonth()}.\n\nKind regards,\n${nameSurname}`);
+  window.open(`mailto:${receipt}?subject=${subject}&body=${body}`, '_blank');
+}
 
 const handleAutoFill = async () => {
   const detailsComplete = await checkDetailsCompleted();
